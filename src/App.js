@@ -5,7 +5,8 @@ import NotFound from "./components/notFound";
 import Home from "./components/home";
 import LoginForm from "./components/loginForm";
 import NavBar from "./components/common/navbar";
-
+import SignUpForm from "./components/signUp";
+import { isExpired } from "react-jwt";
 
 
 function App() {
@@ -20,6 +21,15 @@ function App() {
                     <Route path="/posts" component={Posts} />
                     <Route path="/not-found" component={NotFound} />
                     <Route path="/" exact component={Home} />
+                    <Route path="/signUp" component={SignUpForm} />
+                    <Route path="/posts"
+                           render={props => {
+                               if (isExpired(localStorage.getItem('token'))) {
+                                   return <Redirect to="/" />;
+                               }
+                               return <Posts />;
+                           }}
+                    />
                     <Redirect to="/not-found" />
                 </Switch>
             </div>
